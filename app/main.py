@@ -5,13 +5,7 @@ app = Flask(__name__)
 @app.route("/")
 def hello():
     with open('./static/index.html', 'r') as file:
-        return file.read()
-
-@app.route("/main.js")
-def js():
-    with open('./static/main.js', 'r') as file:
-        return file.read()
-
+        return file.read() + "huehue"
 
 if __name__ == "__main__":
     # Only for debugging while developing
