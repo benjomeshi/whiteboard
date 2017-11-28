@@ -1,0 +1,24 @@
+version: '3.2'
+services:
+  web:
+    build: ./
+    volumes:
+      - ./app:/app
+    ports:
+      - "80:80"
+    environment:
+      - FLASK_APP=main.py
+  db:
+    image: mysql:latest
+    restart: always
+    volumes:
+      - type: volume
+        source: dbvolume
+        target: /var/lib/mysql
+      - type: volume
+        source: dbvolume
+        target: /etc/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: honya_morake
+volumes:
+  dbvolume:
