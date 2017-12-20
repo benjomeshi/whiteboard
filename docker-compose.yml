@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   web:
-    build: ./
+    build: ./app
     volumes:
       - ./app:/app
     ports:
@@ -9,7 +9,7 @@ services:
     environment:
       - FLASK_APP=main.py
   db:
-    image: mysql:latest
+    build: ./db
     restart: always
     volumes:
       - type: volume
