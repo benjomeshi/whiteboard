@@ -6,4 +6,4 @@ RUN echo "NETWORKING=yes" >> /etc/sysconfig/network
 ADD ./setup.sql
 RUN /usr/bin/mysql_safe & sleep 10s && cat setup.sql | mysql
 
-
+CMD ["/usr/bin/mysqld_safe"]
