@@ -1,4 +1,5 @@
 from flask import Flask, abort, request, make_response, jsonify
+import time
 import MySQLdb as mysql
 app = Flask(__name__)
 
@@ -9,12 +10,20 @@ config = {
     "db": "whiteboard"
 }
 
-con = mysql.connect(
-        user = config["user"],
-        passwd = config["password"],
-        host = config["host"],
-        db = config["db"]
-)
+con = None
+
+while(con is None):
+    try:
+        con = mysql.connect(
+                user = config["user"],
+                passwd = config["password"],
+                host = config["host"],
+                db = config["db"]
+        )
+    except Exception as e:
+        print("Could not establish connection to db, retrying..")
+
+    time.sleep(100)
 
 @app.route("/")
 def hello():

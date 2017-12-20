@@ -8,17 +8,19 @@ services:
       - "80:80"
     environment:
       - FLASK_APP=main.py
+    depends_on:
+      - db
   db:
     build: ./db
     restart: always
-    volumes:
-      - type: volume
-        source: dbvolume
-        target: /var/lib/mysql
-      - type: volume
-        source: dbvolume
-        target: /etc/my.cnf
+    # volumes:
+      # - type: volume
+      #   source: dbvolume
+      #   target: /var/lib/mysql
+      # - type: volume
+      #   source: dbvolume
+      #   target: /etc/my.cnf
     environment:
       MYSQL_ROOT_PASSWORD: honya_morake
-volumes:
-  dbvolume:
+# volumes:
+#   dbvolume:
