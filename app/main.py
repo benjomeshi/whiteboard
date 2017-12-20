@@ -21,9 +21,9 @@ while(con is None):
                 db = config["db"]
         )
     except Exception as e:
+        print(e)
         print("Could not establish connection to db, retrying..")
-
-    time.sleep(100)
+    time.sleep(1)
 
 @app.route("/")
 def hello():

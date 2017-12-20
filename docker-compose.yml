@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.3'
 services:
   web:
     build: ./app
@@ -13,14 +13,15 @@ services:
   db:
     build: ./db
     restart: always
-    # volumes:
-      # - type: volume
-      #   source: dbvolume
-      #   target: /var/lib/mysql
-      # - type: volume
-      #   source: dbvolume
-      #   target: /etc/my.cnf
+    volumes:
+      - type: volume
+        source: dbvolume
+        target: /var/lib/mysql
+      - type: volume
+        source: dbvolume
+        target: /etc/my.cnf
+      - "./db/init:/docker-entrypoint-initdb.d"
     environment:
       MYSQL_ROOT_PASSWORD: honya_morake
-# volumes:
-#   dbvolume:
+volumes:
+  dbvolume:
