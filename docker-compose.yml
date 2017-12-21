@@ -1,15 +1,17 @@
-version: '3.2'
+version: '3.3'
 services:
   web:
-    build: ./
+    build: ./app
     volumes:
       - ./app:/app
     ports:
       - "80:80"
     environment:
       - FLASK_APP=main.py
+    depends_on:
+      - db
   db:
-    image: mysql:latest
+    build: ./db
     restart: always
     volumes:
       - type: volume
@@ -18,6 +20,7 @@ services:
       - type: volume
         source: dbvolume
         target: /etc/my.cnf
+      - "./db/init:/docker-entrypoint-initdb.d"
     environment:
       MYSQL_ROOT_PASSWORD: honya_morake
 volumes:
