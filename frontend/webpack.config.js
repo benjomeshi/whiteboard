@@ -1,4 +1,5 @@
 var path = require("path")
+const HtmlWebPackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var WebpackPwaManifest = require('webpack-pwa-manifest')
 var OfflinePlugin = require('offline-plugin')
@@ -9,18 +10,16 @@ let offlinePlugin = new OfflinePlugin({
   safeToUseOptionalCaches: true,
 
   caches: {
-    main: [':rest:', ':externals:'],
-    additional: []
+    main: [':rest:'],
+    additional: [':externals:']
   },
 
-  externals: [
-    // 'https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css',
-    '/'
-  ],
+  // externals: ['https://fonts.googleapis.com/css?family=Pacifico'],
 
   ServiceWorker: {
     navigateFallbackURL: '/',
-    events: true
+    events: true,
+    minify: true
   }
 });
 
@@ -29,8 +28,8 @@ let offlinePlugin = new OfflinePlugin({
 let pwaPlugin = new WebpackPwaManifest({
   name: 'Whiteboard',
   short_name: 'Whiteboard',
-  description: 'Whiteboarding app for the iPad Pro + Apple Pencil',
-  start_url: "/",
+  description: 'Whiteboarding app for the iPad Pro and Apple Pencil',
+  // start_url: ".",
   background_color: '#A5DBF7',
   theme_color: '#A5DBF7',
   icons: [
@@ -61,14 +60,6 @@ module.exports = {
       {
         test: /\.(scss|sass)$/,
         loaders: ExtractTextPlugin.extract("css-loader!sass-loader")
-      },
-      {
-        test:    /\.html$/,
-        exclude: /node_modules/,
-        loader:  'file-loader',
-        query:{
-          name: '[name].[ext]'
-        }
       },
       {
         test:    /\.elm$/,
@@ -123,8 +114,12 @@ module.exports = {
   },
   plugins: [
     new ExtractTextPlugin("[name].css"),
-    pwaPlugin,
-    offlinePlugin
+    new HtmlWebPackPlugin({
+      template: 'webpack/index.html',
+      inject: 'body'
+    }),
+    offlinePlugin,
+    pwaPlugin
   ],
   devServer: {
     inline: true,
