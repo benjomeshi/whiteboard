@@ -27,28 +27,34 @@ while(con is None):
 
 @app.route("/")
 def hello():
-    #TODO:部屋の名前が欲しい.そのあとindex.htmlにその情報をリストで表示
-    cur = con.cursor()
-    sql = "select name from room;"
-    cur.execute(sql)
-    rows = cur.fetchall()
-
     with open('./static/index.html', 'r') as file:
         return file.read()
+
+@app.route('/rooms', methods=['GET'])
+def get_rooms():
+    if request.method == 'GET':
+        #TODO:部屋の名前が欲しい.そのあとindex.htmlにその情報をリストで表示
+        cur = con.cursor()
+        sql = "select name from room;"
+        cur.execute(sql)
+        rows = cur.fetchall()
+        return make_response(jsonify(rows), 200)
 
 ##ボタン的なの押したら部屋作れるようにしたい
 @app.route("/room_name", methods=["POST"])
 def create_room():
-    if not request.headers.get("Content-Type") == 'application/json':
-        error_message = {
-            'error':'not supported Content-Type'
-        }
-        return make_response(jsonify(error_message), 400)
 
-    cur = con.cursor()
-    sql = "insert into ********"
-    cur.execute(sql)
-    return make_response(jsonify({'result': True}))
+    if request.method == 'POST':
+        if not request.headers.get("Content-Type") == 'application/json':
+            error_message = {
+                'error':'not supported Content-Type'
+            }
+            return make_response(jsonify(error_message), 200)
+
+        cur = con.cursor()
+        sql = "insert into ********"
+        cur.execute(sql)
+        return make_response(jsonify({'result': True}))
 
 if __name__ == "__main__":
     # Only for debugging while developing
