@@ -1,5 +1,6 @@
-from flask import Flask, abort, request, make_response, jsonify
+from flask import Flask, abort, request, make_response, jsonify, send_file
 import time
+import os
 import MySQLdb as mysql
 app = Flask(__name__)
 
@@ -25,10 +26,6 @@ while(con is None):
         print("Could not establish connection to db, retrying..")
     time.sleep(1)
 
-@app.route("/")
-def hello():
-    with open('./static/index.html', 'r') as file:
-        return file.read()
 
 @app.route('/rooms', methods=['GET'])
 def get_rooms():
@@ -55,6 +52,27 @@ def create_room():
         sql = "insert into ********"
         cur.execute(sql)
         return make_response(jsonify({'result': True}))
+
+
+@app.route("/")
+def main():
+    index_path = os.path.join(app.static_folder, 'index.html')
+    return send_file(index_path)
+
+
+# Everything not declared before (not a Flask route / API endpoint)...
+@app.route('/<path:path>')
+def route_frontend(path):
+    # ...could be a static file needed by the front end that
+    # doesn't use the `static` path (like in `<script src="bundle.js">`)
+    file_path = os.path.join(app.static_folder, path)
+    if os.path.isfile(file_path):
+        return send_file(file_path)
+    # ...or should be handled by the SPA's "router" in front end
+    else:
+        index_path = os.path.join(app.static_folder, 'index.html')
+        return send_file(index_path)
+
 
 if __name__ == "__main__":
     # Only for debugging while developing
