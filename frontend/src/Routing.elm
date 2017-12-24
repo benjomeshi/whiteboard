@@ -13,7 +13,7 @@ import UrlParser exposing (Parser, (</>), s, top, int, string, map, oneOf, parse
 matchers : Parser (Routes -> a) a
 matchers =
     oneOf
-        []
+        [ map Top top ]
 
 
 parseLocation : Location -> Routes

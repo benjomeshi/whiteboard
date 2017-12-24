@@ -4,6 +4,7 @@ import Navigation
 import State
 import View
 import Types exposing (..)
+import Top.Types
 
 
 main : Program Never Model Msg
