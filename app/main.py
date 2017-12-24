@@ -4,6 +4,7 @@ import time
 import os
 import MySQLdb as mysql
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 config = {
     "user": "root",
@@ -89,4 +90,4 @@ def test_disconnect():
 
 if __name__ == "__main__":
     # Only for debugging while developing
-    app.run(host='0.0.0.0', debug=True, port=80)
+    socketio.run(app)
