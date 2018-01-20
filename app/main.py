@@ -1,5 +1,5 @@
 from flask import Flask, abort, request, make_response, jsonify, send_file, request
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room, leave_room
 import time
 import os
 import MySQLdb as mysql
@@ -12,7 +12,6 @@ config = {
     "host": "db",
     "db": "whiteboard"
 }
-
 con = None
 
 while(con is None):
@@ -43,7 +42,7 @@ def get_rooms():
 def create_room():
     if request.method == 'POST':
         if not request.headers.get("Content-Type") == 'application/json':
-            error_message = {
+            error_message = { 
                 'error':'not supported Content-Type'
             }
             return make_response(jsonify(error_message), 200)
@@ -88,6 +87,13 @@ def test_connect():
 def test_disconnect():
     print('Client disconnected')
 
+@socketio.on("join")
+def on_join(data):
+    username = data["user_name"]
+    room = data["room"]
+    join_room(room)
+    send()
+
+
 if __name__ == "__main__":
-    # Only for debugging while developing
     socketio.run(app)
