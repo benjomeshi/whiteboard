@@ -6,22 +6,21 @@ import MySQLdb as mysql
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-config = {
-    "user": "root",
-    "password": "honya_morake",
-    "host": "db",
-    "db": "whiteboard"
-}
+config_pass = "mysql_config.txt"
+with open(config_pass) as fs:
+    config = [line.split("\n")[0] for line in fs.readlines()]
+
 con = None
 
 while(con is None):
     try:
         con = mysql.connect(
-                user = config["user"],
-                passwd = config["password"],
-                host = config["host"],
-                db = config["db"]
+                user = config[0],
+                passwd = config[1],
+                host = config[2],
+                db = config[3]
         )
+        print("connectin MySQL")
     except Exception as e:
         print(e)
         print("Could not establish connection to db, retrying..")
@@ -35,7 +34,7 @@ def get_rooms():
         sql = "select room.name, user.name from room, drawn_info, user where drawn_info.room_id == room.id and drawn_info.user_id == user.id;"
         cur.execute(sql)
         rows = cur.fetchall()
-
+        print(rows)
     return make_response(jsonify(rows), 200)
 
 @app.route("/mk_room_name", methods=["POST"])
@@ -47,10 +46,13 @@ def create_room():
             }
             return make_response(jsonify(error_message), 200)
 
-        data = request.data
+        room_name = request.headers.get("name")
+        print(room_name)
         cur = con.cursor()
-        sql = "insert into room(name) values ({})".format(data.name)
+        sql = "insert into room(name) values ('{}')".format(room_name)
         cur.execute(sql)
+        rows = cur.fetchall()
+        print(rows)
         return make_response(jsonify({'result': True}))
 
 @app.route("/")
