@@ -1,1 +1,6 @@
 static/
+node_modules/
+package-lock.json
+
+mysql_config.txt
+mysql.json

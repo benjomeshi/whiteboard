@@ -1,0 +1,30 @@
+{
+  "name": "whiteboard_server",
+  "version": "0.0.1",
+  "description": "Serve Web and WebSocket for whiteboard application",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benjomeshi/whiteboard.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benjomeshi/whiteboard/issues"
+  },
+  "homepage": "https://github.com/benjomeshi/whiteboard#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mysql": "^2.15.0",
+    "socket.io": "^2.0.4"
+  }
+}
