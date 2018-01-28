@@ -1,6 +1,7 @@
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var express = require('express');
+var passwordHash = require('password-hash');
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 const io = require('socket.io')(8080);
@@ -30,10 +31,35 @@ mysql_con.query('SELECT * FROM room;',[], (err, results)=>{
 //     res.sendFile(__dirname +'/test_chat.html')
 // })
 
+app.post('/user', (req, res)=>{
+    console.log(req.body)
+    let name = req.body.name
+    let username = req.body.username
+    let password = passwordHash.generate(req.body.password)
+    mysql_con.query("insert into user(name, username, password) values(?,?,?)", [name, username, password], (err, result)=>{
+        if(err){console.log("Insert error!")}else{console.log("Success")}
+    });
+});
+
 app.post('/room' , (req, res)=>{ 
     console.log(req.body)
     let name = req.body.name
-    mysql_con.query("insert into room(name) values(?)", [name], (req, res)=>{})
+    let password = req.body.password
+    mysql_con.query("insert into room(name, password) values(?,?)", [name,password], (req, res)=>{
+        if(err){console.log("Insert error!")}
+    });
+});
+
+app.get('/user', (req, res)=>{
+    mysql_con.query('SELECT name FROM user;',[], (err, results)=>{
+        if (!err) res.send(results)
+    });
+});
+
+app.get('/room', (req, res)=>{
+    mysql_con.query('SELECT id, name FROM room;',[], (err, results)=>{
+        if (!err) res.send(results)
+    });
 });
 
 app.listen(3000, () => {
