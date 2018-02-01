@@ -42,6 +42,7 @@ app.post('/user', (req, res)=>{
 });
 
 app.post('/room' , (req, res)=>{ 
+    console.log("post rooms")
     console.log(req.body)
     let name = req.body.name
     let password = req.body.password
@@ -57,8 +58,11 @@ app.get('/user', (req, res)=>{
 });
 
 app.get('/room', (req, res)=>{
+    console.log("get rooms")
     mysql_con.query('SELECT id, name FROM room;',[], (err, results)=>{
-        if (!err) res.send(results)
+        if (!err && results != undefined){
+            res.send(results)
+        }
     });
 });
 
