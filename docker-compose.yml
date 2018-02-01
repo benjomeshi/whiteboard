@@ -11,7 +11,7 @@ services:
     depends_on:
       - db
   db:
-    build: ./db
+    image: mysql:5.7
     restart: always
     volumes:
       - type: volume
